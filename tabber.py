@@ -5,6 +5,7 @@ Module that brings the nth instance of the requested program to the forground
 import string
 import sys
 import pygetwindow as gw
+from pygetwindow import Win32Window
 
 def tab_to_program(program_name: string, index: int=0) -> None:
     """Brings the given program to the forground
@@ -13,7 +14,9 @@ def tab_to_program(program_name: string, index: int=0) -> None:
         program_name (string): Name of program to bring forward
         index (int): Which instance of the program to bring forward
     """
-    program_window: any = gw.getWindowsWithTitle(program_name)[index]
+    program_windows: list[Win32Window] =  gw.getWindowsWithTitle(program_name)
+    program_windows.sort(key= lambda x: x._hWnd)
+    program_window: Win32Window = program_windows[index]
     program_window.minimize()
     program_window.restore()
 
